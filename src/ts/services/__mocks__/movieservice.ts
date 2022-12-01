@@ -1,8 +1,24 @@
 import { IMovie } from "../../models/Movie";
 
-let mockMovies: IMovie[] = [
+export let mockMovies: IMovie[] = [
   {
     Title: "Toy Story",
+    Year: "1995",
+    imdbID: "tt0114709",
+    Type: "movie",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMj…TViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_SX300.jpg",
+  },
+  {
+    Title: "Toy Story",
+    Year: "1995",
+    imdbID: "tt0114709",
+    Type: "movie",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMj…TViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_SX300.jpg",
+  },
+  {
+    Title: "Story Toy",
     Year: "1995",
     imdbID: "tt0114709",
     Type: "movie",

@@ -51,8 +51,19 @@ export let mockMovies: IMovie[] = [
   },
 ];
 
-export const getData = async (): Promise<IMovie[]> => {
-  return new Promise((resolve) => {
-    resolve(mockMovies);
+export const getData = async (searchText: string): Promise<IMovie[]> => {
+  return new Promise((resolve, reject) => {
+    if (searchText !== "") {
+      if (searchText !== "search not found") {
+        resolve(mockMovies);
+        console.log("before else");
+
+        console.log(mockMovies);
+      } else {
+        resolve([]);
+        console.log("inside else");
+      }
+    } else reject("pröva att söka igen");
+    console.log("catch");
   });
 };

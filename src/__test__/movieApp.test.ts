@@ -5,12 +5,14 @@
 import * as movieAppFunctions from "../ts/movieApp";
 import { test, expect, describe, jest } from "@jest/globals";
 import { mockMovies } from "../ts/services/__mocks__/movieservice";
+import { getData } from "../ts/services/movieservice";
+import { IMovie } from "../ts/models/Movie";
+import axios from "axios";
+
+jest.mock("axios");
+const mockAxios = axios as jest.Mocked<typeof axios>;
 
 describe("init", () => {
-  //   beforeEach(() => {
-  //     jest.resetModules();
-  //     jest.restoreAllMocks();
-  //   });
   test("should start handleSubmit with click", () => {
     console.log("test:should start handleSubmit with click");
     //arrange
@@ -33,30 +35,67 @@ describe("init", () => {
 });
 
 describe("handleSubmit", () => {
-  test("should get searchText value", async () => {
-    console.log("test:should get searchText value");
+  beforeEach(() => {
+    jest.resetModules();
+    jest.restoreAllMocks();
+  });
+
+  test("should start createHtml", async () => {
+    console.log("test: should start createHtml");
     //arrange
+    let spy = jest.spyOn(movieAppFunctions, "createHtml").mockReturnValue();
     document.body.innerHTML = `<form id="searchForm">
-      <input type="text" id="searchText" placeholder="Skriv titel här" value="valueText" />
+      <input type="text" id="searchText" placeholder="Skriv titel här" value="Toy Story"/>
       <button type="submit" id="search">Sök</button>
-    </form>`;
-    let searchText = (document.getElementById("searchText") as HTMLInputElement)
-      .value;
+      </form>
+      <div id="movie-container"></div>`;
+    let movies: IMovie[];
+    mockAxios.get.mockResolvedValue({ data: { Search: mockMovies } });
+    movies = await getData("../services/movieservice.ts");
     //act
     await movieAppFunctions.handleSubmit();
+
     //assert
-    expect(searchText).toBe("valueText");
+    expect(spy).toHaveBeenCalled();
+
     document.body.innerHTML = "";
   });
-  test("should start createHTML", () => {});
+  test("should start displayNoResult", async () => {
+    console.log("test: should start displayNoResult");
+    //arrange
+    let spy = jest
+      .spyOn(movieAppFunctions, "displayNoResult")
+      .mockReturnValue();
+    document.body.innerHTML = `<form id="searchForm">
+      <input type="text" id="searchText" placeholder="Skriv titel här"/>
+      <button type="submit" id="search">Sök</button>
+      </form>
+      <div id="movie-container"></div>`;
+    (document.getElementById("searchText") as HTMLInputElement).value =
+      "search not found";
+    let movies: IMovie[];
+    mockAxios.get.mockRejectedValue({ data: { Search: mockMovies } });
+    movies = await getData("../services/movieservice.ts");
+    //act
+    await movieAppFunctions.handleSubmit();
+
+    //assert
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    document.body.innerHTML = "";
+  });
 });
+
 describe("createHtml", () => {
+  beforeEach(() => {
+    jest.resetModules();
+    jest.restoreAllMocks();
+  });
   test("should create html and display list", () => {
     console.log("should create html and display list");
     //arrange
     document.body.innerHTML = `<div id="container"></div>`;
     let container = document.getElementById("container") as HTMLDivElement;
-    // const match = document.querySelectorAll(".movie").length;
     //act
     movieAppFunctions.createHtml(mockMovies, container);
     //assert
@@ -66,6 +105,10 @@ describe("createHtml", () => {
 });
 
 describe("displayNoResult", () => {
+  beforeEach(() => {
+    jest.resetModules();
+    jest.restoreAllMocks();
+  });
   test("should display noMessage", () => {
     console.log("should display noMessage");
     //arrange

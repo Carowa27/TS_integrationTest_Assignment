@@ -7,15 +7,6 @@ import axios from "axios";
 jest.mock("axios");
 const mockAxios = axios as jest.Mocked<typeof axios>;
 
-// jest.mock("./../services/movieservice.ts");
-
-// jest.mock("axios", () => ({
-//   get: async () => {
-//     return new Promise((resolve) => {
-//       resolve({ data: { Search: mockMovies } });
-//     });
-//   },
-// }));
 describe("getData", () => {
   test("should get mock data from api", async () => {
     console.log("test:should get mock data from api");
@@ -24,7 +15,7 @@ describe("getData", () => {
     let result: IMovie[] = await getData("../services/movieservice.ts");
 
     expect(result.length).toBeGreaterThan(0);
-    expect(result[0].Title).toBe("Toy Story");
+    expect(result[0].Title).toBe(mockMovies[0].Title);
   });
   test("should not get mock data from api", async () => {
     console.log("test:should not get mock data from api");

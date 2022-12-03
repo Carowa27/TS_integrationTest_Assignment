@@ -48,7 +48,7 @@ export const createHtml = (movies: IMovie[], container: HTMLDivElement) => {
     movie.appendChild(img);
 
     container.appendChild(movie);
-    console.log(movies);
+    //console.log(movies);
   }
 };
 
